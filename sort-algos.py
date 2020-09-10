@@ -75,9 +75,108 @@ if __name__ == '__main__':
     print(z)
     print(insertionSort(z))
      
+ 
+#%%
+# 3. quick sort
+    
+def quickSort(x, st, en):
+    '''
+    index i: st <= i < en
+    '''
+    
+    n = en - st
+    
+    if n <= 1:
+        return x
+    
+    q = partition(x, st, en)
+    
+    quickSort(x, st, q)
+    quickSort(x, q+1, en)
+
+    return x
+
+def partition(x, st, en):
+    '''
+    use the first element as pivot
+    '''
+
+    pivot = x[st]
+    
+    i = st
+    
+    for j in range(st+1, en):
+        if x[j] < pivot:
+            i += 1
+            temp = x[i]
+            x[i] = x[j]
+            x[j] = temp
+            
+    temp = x[i]
+    x[i] = pivot
+    x[st] = temp
+    
+    return i
+
+
+def rand_quickSort(x, st, en):
+    '''
+    index i: st <= i < en
+    '''
+    
+    n = en - st
+    
+    if n <= 1:
+        return x
+    
+    q = rand_partition(x, st, en)
+    
+    quickSort(x, st, q)
+    quickSort(x, q+1, en)
+
+    return x
+
+
+from random import choice
+
+def rand_partition(x, st, en, verbose=False):
+    '''
+    select a random element as pivot
+    '''
+    
+    p = choice(range(st,en))
+    pivot = x[p]
+    
+    if verbose:
+        print('pivot is {}'.format(pivot))
+    
+    i = st
+    for j in range(0,p):
+        if x[j] < pivot:
+            temp = x[i]
+            x[i] = x[j]
+            x[j] = temp
+            i += 1
+    for j in range(p+1,en):
+        if x[j] < pivot:
+            temp = x[i]
+            x[i] = x[j]
+            x[j] = temp
+            i += 1
+            
+    x[p] = x[i]
+    x[i] = pivot
+    
+    return i
     
     
     
+    
+if __name__=='__main__':
+    z = np.random.choice(list(range(1,101)), 100, replace=False)
+    print(z)
+    print(quickSort(z, 0, len(z)))
+    print(rand_quickSort(z, 0, len(z)))
     
     
     
