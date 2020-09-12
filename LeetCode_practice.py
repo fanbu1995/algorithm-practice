@@ -172,3 +172,63 @@ class WordDictionary(object):
             return node.isEndWord
         
         return search_node(self.root, word)
+    
+    
+    
+#%% word ladder problem
+from collections import deque
+from string import ascii_lowercase 
+
+class Solution:
+    def ladderLength(self, beginWord, endWord, wordList):
+        
+        wordSet = set(wordList)
+        
+        print(wordSet)
+        
+        if endWord not in wordSet:
+            return 0
+        
+        queue = deque()
+        queue.append(beginWord)
+        
+        print(queue)
+        
+        # BFS
+        
+        dist = 0
+        
+        while queue:
+            
+            print('processing the queue...')
+            
+            # get all words in the queue (all in the same dist from begin) 
+            size = len(queue)
+            for i in range(size):
+                curr = queue.popleft()
+                
+                print('current word at level {} is {}'.format(dist, curr))
+                
+                # for each current word
+                # iteratively propose one-letter change to the curren word
+                for j in range(len(curr)):
+                    temp = curr[j]
+                    for letter in ascii_lowercase:
+                        # make sure there IS a change!
+                        if letter == temp:
+                            continue
+                        # if there is indeed a change, propose
+                        proposal = curr[:j]+letter+curr[(j+1):]
+                        # check if the proposed word is endWord (if so, return)
+                        if proposal == endWord:
+                            return dist + 1
+                        # check if the proposed word is in set
+                        elif proposal in wordSet:
+                            queue.append(proposal)
+                            wordSet.remove(proposal)
+                            
+            dist += 1
+            
+        return 0
+        
+#%%
