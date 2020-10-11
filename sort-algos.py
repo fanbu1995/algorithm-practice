@@ -142,6 +142,7 @@ from random import choice
 def rand_partition(x, st, en, verbose=False):
     '''
     select a random element as pivot
+    exchange pivot with first element, and partition as usual
     '''
     
     p = choice(range(st,en))
@@ -150,21 +151,32 @@ def rand_partition(x, st, en, verbose=False):
     if verbose:
         print('pivot is {}'.format(pivot))
     
+#    i = st
+#    for j in range(st,p):
+#        if x[j] < pivot:
+#            temp = x[i]
+#            x[i] = x[j]
+#            x[j] = temp
+#            i += 1
+#    for j in range(p+1,en):
+#        if x[j] < pivot:
+#            temp = x[i]
+#            x[i] = x[j]
+#            x[j] = temp
+#            i += 1
+        
+    x[p] = x[st]
+    x[st] = pivot
+        
     i = st
-    for j in range(0,p):
+    for j in range(st+1,en):
         if x[j] < pivot:
+            i += 1
             temp = x[i]
             x[i] = x[j]
             x[j] = temp
-            i += 1
-    for j in range(p+1,en):
-        if x[j] < pivot:
-            temp = x[i]
-            x[i] = x[j]
-            x[j] = temp
-            i += 1
             
-    x[p] = x[i]
+    x[st] = x[i]
     x[i] = pivot
     
     return i
@@ -182,6 +194,25 @@ if __name__=='__main__':
     
     
     
+#%%
+# select order statistic
+    
+def randSelect(x, st, en, i):
+    '''
+    select ith smallest element of x[st:en]
+    '''
+    
+    if en==st :
+        return x[st]
+    
+    k = rand_partition(x, st, en)
+    if k == i:
+        return x[k]
+    
+    if k > i:
+        return randSelect(x, st, k, i)
+    else:
+        return randSelect(x, k+1, en, i)
     
     
     

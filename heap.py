@@ -55,6 +55,8 @@ class MinHeap:
     
     def settle(self, i):
         # settle element at i to its right spot
+        # make sure data[i] is smaller than its children
+        # otherwise, swap i with its smaller child until condition is satisfied
         if not self.exist_left(i):
             return
         if not self.exist_right(i) and self.data[i] > self.data[self.get_left(i)]:

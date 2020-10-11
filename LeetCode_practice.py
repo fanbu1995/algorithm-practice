@@ -232,3 +232,62 @@ class Solution:
         return 0
         
 #%%
+# find maximum difference between A[j] and A[i]
+# s.t. j > i
+        
+def findMaxDiff(A):
+    if len(A) <= 1:
+        return None
+    if len(A) == 2:
+        return A[1] - A[0]
+    min_ele = A[0]
+    max_diff = A[1] - A[0]
+    
+    for a in A:
+        if a - min_ele > max_diff:
+            max_diff = a - min_ele
+        
+        if a < min_ele:
+            min_ele = a
+            
+    return max_diff
+
+# drive program
+A = [2, 7, 1, 8, 2, 8, 14, 25, 14, 0, 4, 5]   
+findMaxDiff(A)
+
+
+#%%
+# check if a binary tree is a valid binary search tree
+
+class Node:
+    def __init__(self,value):
+        self.value = value
+        self.left = None
+        self.right = None
+        
+
+import math
+
+def checkValidBST(root):
+    def checkWithinRange(root, low, high):
+        if root is None:
+            return True
+        if root.value < low or root.value > high:
+            return False
+        if root.value >= low and root.value <= high:
+            left = checkWithinRange(root.left, low, root.value-1)
+            right = checkWithinRange(root.right, root.value+1, high)
+            
+            return (left and right)
+        
+    return checkWithinRange(root, -math.inf, math.inf)
+        
+# driver program
+root = Node(4) 
+root.left = Node(2) 
+root.right = Node(5) 
+root.left.left = Node(1) 
+root.left.right = Node(5) 
+
+print(checkValidBST(root))

@@ -297,10 +297,189 @@ def OneEditApart(s1, s2):
     
     
     
-    
+#%%
+# The icecream parlor problem
+# find the two indices (1-based index) in arr that sum to m
+def icecreamParlor(m, arr):
+    if m==0 or len(arr) == 0:
+        return
+    priceDiffs = dict()
+    for i in range(len(arr)):
+        if arr[i] in priceDiffs:
+            j = priceDiffs[arr[i]]
+            return j+1, i+1
+        else:
+            priceDiffs[m-arr[i]] = i
             
+    return
+        
+
+#%%    
+# check for colorful number
+def isColorful(num):
+    num = str(num)
+    if len(num) <= 1:
+        return True
+    
+    numList = list(map(int,num))
+    n = len(numList)
+    
+    prods = set()
+    
+    for i in range(n):
+        prod = numList[i]
+        if prod in prods:
+            return False
+        prods.add(prod)
+        for j in range(i+1,n):
+            prod *= numList[j]
+            if prod in prods:
+                return False
+            prods.add(prod)
+            
+    return True
+            
+    
+#%% 
+# quick Sort
+# (in place)
+def quickSort(x, st, en):
+    if en-st <= 1:
+        return
+    
+    q = partition(x, st, en)
+    
+    quickSort(x, st, q)
+    quickSort(x, q+1, en)
+    
+    return
+
+def partition(x, st, en):
+    
+    if en-st<=1:
+        return
+    
+    pivot = x[st]
+    
+    i = st
+    for j in range(st+1, en):
+        if x[j] < pivot:
+            i += 1
+            temp = x[i]
+            x[i] = x[j]
+            x[j] = temp
+    
+    x[st] = x[i]        
+    x[i] = pivot
+    
+    return i
+    
+#%%
+# Snake and ladders (hacker rank)
+from collections import defaultdict, deque
+
+def quickestWayUp(ladders, snakes):
+    
+    LS = dict()
+    # build ladders and snakes
+    for l in ladders:
+        st, en = l
+        LS[st] = en
+    for s in snakes:
+        st,en = l
+        LS[st] = en
+        
+    # build edges: adjacency list
+    adj = defaultdict(list)
+    for i in range(1,100):
+        # if i is a starting point of ladder/snake
+        # no out-degree
+        if i in LS:
+            continue
+        
+        for j in range(i+1, min(i+7,101)):
+            # if j is a starting point of ladder/snake
+            # directly lead to the end point of ladder/snake
+            if j in LS:
+                adj[i].append(LS[j])
+            else:
+                adj[i].append(j)
+                
+    # do BST
+    visited = set()
+    queue = deque()
+    
+    # initialize distance vector
+    dist = [-1] * 101
+    dist[1] = 0
+    
+    queue.append(1)
+    visited.add(1)
+    
+    while queue:
+        orig = queue.pop()
+        if orig in visited or orig not in adj:
+            continue
+        for nei in adj[orig]:
+            if nei in visited:
+                continue
+            dist[nei] = dist[orig] + 1
+            queue.append(nei)
+            visited.add(nei)
+            
+    return dist[100]
+
+
+#%%
+def quickestWayUp(ladders, snakes):
+    # store ladders and snakes
+    LS = dict()
+    for l in ladders:
+        st, en = l
+        LS[st] = en
+    for s in snakes:
+        st, en = s
+        LS[st] = en
+
+    #  build a graph based on ladders and snakes
+    adj = dict()
+    for i in range(1,100):
+        if i in LS:
+            # if i is startpoint of L or S, this point doesn't go anywhere
+            continue
+        # otherwise...
+        adj[i] = list()
+        for j in range(i+1,min(i+7,101)):
+            if j in LS:
+                # if j is start point of ladder or snake,
+                # put the end point in place of j
+                adj[i].append(LS[j])
+            else:
+                adj[i].append(j)
+    
+    # BFS on the graph
+    visited = set()
+    queue = list()
+    dist = [-1] * 101 # dist[0] is not used; we need dist[100]
+    dist[1] = 0
+
+    queue.insert(0, 1)
+    visited.add(1)
+    while queue:
+        orig = queue.pop()
+        if orig not in adj:
+            continue
+        for c in adj[orig]:
+            if c in visited:
+                continue
+            dist[c] = 1 + dist[orig]
+            queue.insert(0, c)
+            visited.add(c)
+
+    return dist[100]
         
     
     
+            
     
-
+    
